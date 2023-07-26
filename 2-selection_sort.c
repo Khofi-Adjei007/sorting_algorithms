@@ -35,7 +35,8 @@ flag = 1; /* Set flag to 1 if a swap is needed */
 }
 }
 
-/* Swap the found minimum element with the
+/*
+ * Swap the found minimum element with the
  * first element of the unsorted part
  */
 
