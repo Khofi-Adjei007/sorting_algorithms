@@ -9,48 +9,59 @@
 
 void insertion_sort_list(listint_t **list)
 {
-listint_t *sorted, *unsorted, *current, *next_node;
+listint_t *unsorted;
 
+/* Check if the list is empty or has only one node */
 if (list == NULL || *list == NULL || (*list)->next == NULL)
 return;
 
-sorted = *list;
-unsorted = sorted->next;
-sorted->next = NULL;
-unsorted->prev = NULL;
-
+unsorted = (*list)->next;
 while (unsorted != NULL)
 {
-current = unsorted;
+listint_t *current = unsorted;
 unsorted = unsorted->next;
 
-while (sorted != NULL && sorted->n < current->n)
-sorted = sorted->next;
+/* Perform insertion sort to place 'current' node in its correct position */
+while (current->prev && current->prev->n > current->n)
+{
+/* Swap the current node with its previous node in the list */
+current = swap_node(current, list);
 
-if (sorted == NULL)
-{
-/* Current node is the largest so far */
-current->prev = current->next = NULL;
-sorted = current;
-}
-else if (sorted->prev == NULL)
-{
-/* Current node is the smallest so far */
-current->next = sorted;
-current->prev = NULL;
-sorted->prev = current;
-*list = current;
-}
-else
-{
-/* Insert current node into its correct position */
-next_node = sorted->prev;
-current->next = sorted;
-current->prev = next_node;
-sorted->prev = current;
-next_node->next = current;
-}
-
+/* Print the list after the swap */
 print_list(*list);
 }
+}
+}
+
+/**
+* swap_node - Swaps a node with its previous one in the doubly linked list.
+*
+* @node: Pointer to the node to be swapped.
+* @list: Pointer to the head of the doubly linked list.
+*
+* Return: Return a pointer to a node which was entered.
+*/
+
+listint_t *swap_node(listint_t *node, listint_t **list)
+{
+listint_t *back = node->prev, *current = node;
+
+/* Update the next and prev pointers of the nodes surrounding the current node */
+back->next = current->next;
+if (current->next)
+current->next->prev = back;
+
+/* Perform the swap by updating the next and prev pointers of the current node */
+current->next = back;
+current->prev = back->prev;
+back->prev = current;
+
+/* If the current node is now the new head, update the list pointer */
+if (current->prev)
+current->prev->next = current;
+else
+*list = current;
+
+/* Return the pointer to the current node after the swap */
+return (current);
 }
