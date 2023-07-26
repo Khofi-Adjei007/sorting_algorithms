@@ -73,5 +73,5 @@ array[high] = temp;
 print_array(array, high + 1);
 }
 
-return i + 1;
+return (i + 1);
 }
